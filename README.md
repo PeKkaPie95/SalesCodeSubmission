@@ -102,7 +102,7 @@ Input: 'wait one second' -> meaningful=True
 Input: 'umm okay stop' -> meaningful=True
 Input: 'mmff' -> meaningful=False
 ```
-## 🚀 Run Instructions
+## Run Instructions
 
 ### Install dependencies
 ```bash
