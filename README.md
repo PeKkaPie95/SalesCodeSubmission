@@ -40,8 +40,11 @@ def _on_agent_speaking_started(*_):
 @session.on("agent_speech_ended")
 def _on_agent_speaking_ended(*_):
     agent_is_speaking = False
+```
+
 When a transcription event arrives:
 
+```python
 @session.on("transcription")
 async def handle_transcription(text: str, confidence: float, **kwargs):
     # If agent is not speaking → normal user speech handling
@@ -55,8 +58,11 @@ async def handle_transcription(text: str, confidence: float, **kwargs):
         await session.agent.stop_speaking()   # interrupts TTS immediately
     else:
         print(f"[IGNORED FILLER] {text}")
+```
 
-Meaning-based Speech Detection
+### Meaning-based Speech Detection
+
+```python
 IGNORED_FILLERS = set(
     word.strip().lower() for word in os.getenv("IGNORED_FILLERS", "uh,umm,hmm,haan").split(",")
 )
@@ -72,11 +78,12 @@ def is_meaningful_speech(text: str, confidence: float, threshold: float = 0.75) 
         return False
 
     return True
-
-Testing
+```
+##  Testing
 
 A small test script verifies behavior:
 
+```python
 from realtime_with_tts import is_meaningful_speech
 
 test("umm", 0.95)                # ignored
@@ -84,20 +91,31 @@ test("haan", 0.90)               # ignored
 test("wait one second", 0.95)    # interrupt
 test("umm okay stop", 0.96)      # interrupt
 test("mmff", 0.20)               # noise ignored (low confidence)
+```
 
-Expected Output
+### Expected Output
+
+```
 Input: 'umm' -> meaningful=False
 Input: 'haan' -> meaningful=False
 Input: 'wait one second' -> meaningful=True
 Input: 'umm okay stop' -> meaningful=True
 Input: 'mmff' -> meaningful=False
+```
+## 🚀 Run Instructions
 
-Run Instructions
-Install dependencies
+### Install dependencies
+```bash
 pip install livekit-agents livekit-plugins-openai python-dotenv
+```
 
-Optional: customize filler list
+### Optional: customize filler list
+```bash
 export IGNORED_FILLERS="uh,umm,hmm,haan"
+```
 
-Run the agent
+### Run the agent
+```bash
 python realtime_with_tts.py
+```
+
