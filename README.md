@@ -28,6 +28,38 @@ This project adds a **speech meaning filter layer** *without modifying LiveKit's
 
 ---
 
+               ┌─────────────────────────────────────────┐
+               │           User Speech Input              │
+               └─────────────────────────────────────────┘
+                                  │
+                                  ▼
+                      (LiveKit Automatic VAD + ASR)
+                                  │
+                       Provides text + confidence
+                                  │
+                                  ▼
+                   ┌────────────────────────────┐
+                   │ is_meaningful_speech()     │
+                   │ - Filters fillers          │
+                   │ - Checks confidence        │
+                   └────────────────────────────┘
+                                  │
+                     ┌────────────┴────────────┐
+                     │                         │
+                     ▼                         ▼
+       Only fillers OR Low Confidence     Contains Meaningful Words
+                     │                         │
+                     ▼                         ▼
+         ┌────────────────────┐      ┌──────────────────────────┐
+         │ IGNORE + Continue  │      │ INTERRUPT Agent TTS       │
+         └────────────────────┘      └──────────────────────────┘
+                                               │
+                                               ▼
+                                   session.agent.stop_speaking()
+
+
+---
+
 ## ⚙️ How It Works
 
 The agent maintains a flag indicating whether **TTS is currently playing**:
