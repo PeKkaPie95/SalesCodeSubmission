@@ -17,3 +17,17 @@ This improves natural conversation flow and prevents accidental interruptions.
 4. **Immediately stops agent TTS** when a real interruption is detected:
 ```python
 await session.agent.stop_speaking()
+
+I have implemented interruption-aware voice handling for the LiveKit voice agent. 
+The agent now ignores filler/hesitation words (e.g., “umm”, “hmm”, “haan”) *only while the agent is speaking*, 
+but still allows the user to interrupt intentionally when meaning is detected (e.g., “stop”, “wait”, “one second”).
+
+Key Points:
+• No VAD or STT parameters were modified (as required)
+• Filler list is configurable via environment variable (IGNORED_FILLERS)
+• Confidence threshold filters out noise
+• Real interruptions cause immediate TTS stop using session.agent.stop_speaking()
+• Behavior is tested locally using test_filler_interrupts.py
+
+Repository:
+https://github.com/PeKkaPie95/SalesCodeSubmission
